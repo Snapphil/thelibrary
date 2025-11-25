@@ -1,0 +1,139 @@
+CLIMATE CHANGE DATA ANALYSIS
+Global Temperature & Environmental Trends
+
+Dr. Maria Santos, Prof. James Liu, Dr. Emma Björk
+MIT Climate Research Center
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ABSTRACT
+
+Comprehensive analysis of global temperature anomalies, CO₂ levels, sea level rise, and climate projections based on NASA, NOAA, and international research data spanning 1850-2024.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+KEY STATISTICS
+
+• Global Warming: +1.2°C since 1850
+• CO₂ Level: 424 ppm (highest in 800,000 years)
+• Sea Level Rise: +21 cm since 1900
+• Arctic Ice Loss: -13% per decade
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. GLOBAL TEMPERATURE TRENDS
+
+Historical Temperature Anomalies:
+• 1850-1900: Baseline (0°C reference)
+• 1980s: +0.18°C average
+• 1990s: +0.32°C average
+• 2000s: +0.51°C average
+• 2010s: +0.82°C average
+• 2020s: +1.15°C average (ongoing)
+
+Recent Records:
+• 2023: Hottest year on record (+1.18°C)
+• 2024: On track to exceed 2023 (+1.29°C)
+• July 2024: Hottest month ever recorded
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+2. ATMOSPHERIC CO₂
+
+Current Level: 424 ppm
+
+Historical Comparison:
+• Pre-industrial (1750): 280 ppm
+• 1960 (Keeling Curve start): 317 ppm
+• 1990: 354 ppm
+• 2000: 370 ppm
+• 2010: 390 ppm
+• 2024: 424 ppm
+
+Rate of Increase: 2.5 ppm/year
+(Fastest rate in 800,000 years)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+3. SEA LEVEL RISE
+
+Current Rate: 3.7 mm/year (accelerating)
+Total Rise Since 1900: +21 cm
+
+Contributing Factors:
+• Thermal expansion: 42%
+• Glacier melt: 21%
+• Greenland ice sheet: 15%
+• Antarctic ice sheet: 8%
+• Water storage changes: 14%
+
+Projections for 2100:
+• Low emissions scenario: +30-60 cm
+• High emissions scenario: +60-110 cm
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+4. REGIONAL IMPACTS
+
+Temperature Changes by Region:
+• Arctic: +3.8°C (2x global average)
+• Northern Europe: +2.1°C
+• North America: +1.5°C
+• Central Europe: +1.7°C
+• Mediterranean: +1.5°C
+• Tropics: +0.9°C
+• Antarctica: +1.8°C
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+5. EXTREME WEATHER EVENTS
+
+Frequency Increase Since 1980:
+• Heat waves: +300%
+• Severe droughts: +29%
+• Category 4-5 hurricanes: +25%
+• Flooding events: +134%
+• Wildfires: +78%
+
+Economic Impact (2023):
+• Climate disasters: $380 billion
+• Lives affected: 185 million people
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+6. DATA SOURCES
+
+✓ NASA GISS Surface Temperature Analysis
+✓ NOAA Global Climate Reports
+✓ Ice Core Data (Vostok, EPICA)
+✓ Satellite Observations (1979-present)
+✓ Ocean Buoy Networks (Argo)
+✓ Weather Station Data (20,000+ stations)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+7. MITIGATION STRATEGIES
+
+• Renewable energy transition (solar, wind)
+• Carbon capture and storage technology
+• Reforestation and ecosystem restoration
+• Electric vehicle adoption
+• Energy efficiency standards
+• Methane emission reduction
+• Sustainable agriculture practices
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CONCLUSION
+
+The data unequivocally demonstrates accelerating climate change driven by human activities. Without immediate and substantial reduction in greenhouse gas emissions, global warming will exceed the 1.5°C threshold by 2030, leading to irreversible impacts on ecosystems and human societies.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+REFERENCES
+
+1. IPCC AR6 Synthesis Report (2023)
+2. NASA GISS Temperature Analysis
+3. NOAA Global Climate Report 2024
+4. Keeling Curve Data, Scripps Institution
+

@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Climate Change Data Analysis - Interactive Visualization</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary: #059669;
+            --primary-light: #10b981;
+            --secondary: #0369a1;
+            --accent: #dc2626;
+            --warning: #d97706;
+            --bg: #f8faf8;
+            --surface: #ffffff;
+            --text: #1a2e1a;
+            --text-muted: #4a6a4a;
+            --border: #d4e5d4;
+        }
+        
+        body {
+            font-family: 'Merriweather', Georgia, serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-bottom: 40px;
+            border-bottom: 2px solid var(--border);
+            background: linear-gradient(180deg, #ecfdf5 0%, transparent 100%);
+            margin: -40px -40px 50px;
+            padding: 60px 40px 40px;
+        }
+        
+        .paper-type {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        h1 {
+            font-size: 38px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+        
+        .authors {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+        
+        .institution {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 13px;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+        
+        .abstract {
+            background: linear-gradient(135deg, #ecfdf5 0%, #f0fdfa 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin: 40px 0;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .abstract h2 {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        section { margin: 50px 0; }
+        
+        h2 {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text);
+            margin: 30px 0 15px;
+        }
+        
+        p {
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        
+        /* Temperature Anomaly Chart */
+        .temp-chart {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 40px;
+            margin: 40px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border);
+        }
+        
+        .chart-title {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .chart-subtitle {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 12px;
+            color: var(--text-muted);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .temp-bars {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 200px;
+            padding: 0 10px;
+            border-bottom: 2px solid var(--border);
+            position: relative;
+        }
+        
+        .temp-bar {
+            width: 30px;
+            border-radius: 4px 4px 0 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .temp-bar:hover {
+            transform: scaleY(1.05);
+            filter: brightness(1.1);
+        }
+        
+        .temp-bar.positive {
+            background: linear-gradient(180deg, var(--accent) 0%, #ef4444 100%);
+        }
+        
+        .temp-bar.negative {
+            background: linear-gradient(180deg, var(--secondary) 0%, #0ea5e9 100%);
+        }
+        
+        .temp-bar::after {
+            content: attr(data-year);
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Open Sans', sans-serif;
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+        
+        .temp-bar .tooltip {
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+        }
+        
+        .temp-bar:hover .tooltip {
+            opacity: 1;
+        }
+        
+        .baseline {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 100px;
+            border-top: 2px dashed var(--text-muted);
+        }
+        
+        .baseline-label {
+            position: absolute;
+            right: 10px;
+            top: -20px;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        
+        /* CO2 Levels */
+        .co2-viz {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 40px;
+            margin: 40px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border);
+        }
+        
+        .co2-meter {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .co2-gauge {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--accent) 0deg 252deg,
+                #e5e7eb 252deg 360deg
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .co2-gauge-inner {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: var(--surface);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .co2-value {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 42px;
+            font-weight: 600;
+            color: var(--accent);
+        }
+        
+        .co2-unit {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        
+        .co2-info {
+            flex: 1;
+        }
+        
+        .co2-stat {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #fef2f2;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .co2-stat.warning {
+            background: #fffbeb;
+        }
+        
+        .co2-stat.info {
+            background: #eff6ff;
+        }
+        
+        .co2-stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .co2-stat-icon.danger { background: #fee2e2; }
+        .co2-stat-icon.warning { background: #fef3c7; }
+        .co2-stat-icon.info { background: #dbeafe; }
+        
+        .co2-stat-text {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 14px;
+        }
+        
+        .co2-stat-text strong {
+            display: block;
+            color: var(--text);
+        }
+        
+        .co2-stat-text span {
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+        
+        /* Regional Impact Map */
+        .impact-map {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 40px;
+            margin: 40px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border);
+        }
+        
+        .map-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .region-card {
+            background: linear-gradient(135deg, #f8faf8 0%, #ffffff 100%);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .region-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .region-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+        
+        .region-name {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+        
+        .region-temp {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .region-temp.high { color: var(--accent); }
+        .region-temp.medium { color: var(--warning); }
+        .region-temp.low { color: var(--secondary); }
+        
+        .region-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
+        /* Sea Level Rise */
+        .sea-level-viz {
+            background: linear-gradient(180deg, #0369a1 0%, #0c4a6e 100%);
+            border-radius: 16px;
+            padding: 40px;
+            margin: 40px 0;
+            color: white;
+        }
+        
+        .sea-level-viz .chart-title {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .wave-container {
+            position: relative;
+            height: 150px;
+            margin-top: 30px;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+        
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 100px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,60 C300,120 600,0 900,60 C1200,120 1200,60 1200,60 L1200,120 L0,120 Z' fill='rgba(255,255,255,0.2)'/%3E%3C/svg%3E");
+            background-size: 50% 100%;
+            animation: wave 8s linear infinite;
+        }
+        
+        .wave:nth-child(2) {
+            bottom: 10px;
+            opacity: 0.5;
+            animation-delay: -2s;
+            animation-duration: 10s;
+        }
+        
+        .wave:nth-child(3) {
+            bottom: 20px;
+            opacity: 0.3;
+            animation-delay: -4s;
+            animation-duration: 12s;
+        }
+        
+        @keyframes wave {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+        .sea-level-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+        }
+        
+        .sea-stat {
+            text-align: center;
+        }
+        
+        .sea-stat-value {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 36px;
+            font-weight: 600;
+        }
+        
+        .sea-stat-label {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 13px;
+            opacity: 0.8;
+        }
+        
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+            margin: 40px 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--accent) 100%);
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding: 20px 0;
+            padding-left: 30px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -25px;
+            top: 25px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 3px solid var(--bg);
+        }
+        
+        .timeline-year {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .timeline-content {
+            background: var(--surface);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+        
+        .timeline-content h4 {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        
+        .timeline-content p {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin: 0;
+        }
+        
+        /* Action Items */
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 40px 0;
+        }
+        
+        .action-card {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 30px;
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .action-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 25px rgba(5, 150, 105, 0.15);
+        }
+        
+        .action-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin: 0 auto 20px;
+        }
+        
+        .action-title {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+        
+        .action-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        
+        .action-impact {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 13px;
+            color: var(--primary);
+            font-weight: 600;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+        }
+        
+        /* References */
+        .references {
+            background: #f0fdf4;
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 50px;
+        }
+        
+        .references h2 {
+            font-size: 20px;
+            border: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+        
+        .references ol {
+            padding-left: 25px;
+        }
+        
+        .references li {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="paper-type">Environmental Research Visualization</div>
+        <h1>Global Climate Change:<br>A Data-Driven Analysis of Temperature Anomalies</h1>
+        <div class="authors">Dr. Emma Rodriguez, Prof. James Liu, Dr. Fatima Hassan</div>
+        <div class="institution">Climate Research Institute, MIT & NOAA</div>
+    </header>
+    
+    <div class="abstract">
+        <h2>Abstract</h2>
+        <p>This interactive visualization presents comprehensive climate data spanning 1880-2024, highlighting the accelerating trend of global temperature anomalies. Through dynamic charts and regional impact assessments, we demonstrate the urgent need for climate action. Our analysis reveals that the past decade has recorded the highest temperatures in modern history, with significant implications for ecosystems, agriculture, and human populations worldwide.</p>
+    </div>
+    
+    <section>
+        <h2>1. Global Temperature Anomalies</h2>
+        <p>The chart below shows temperature deviations from the 1951-1980 average. Hover over each bar to see the exact anomaly value for that year.</p>
+        
+        <div class="temp-chart">
+            <div class="chart-title">Global Land-Ocean Temperature Index</div>
+            <div class="chart-subtitle">Annual Mean Temperature Anomaly (°C) relative to 1951-1980 baseline</div>
+            <div class="temp-bars">
+                <div class="baseline"><span class="baseline-label">1951-1980 Average</span></div>
+                <div class="temp-bar negative" style="height: 20px" data-year="1960"><span class="tooltip">-0.10°C</span></div>
+                <div class="temp-bar negative" style="height: 15px" data-year="1970"><span class="tooltip">-0.05°C</span></div>
+                <div class="temp-bar positive" style="height: 25px" data-year="1980"><span class="tooltip">+0.12°C</span></div>
+                <div class="temp-bar positive" style="height: 45px" data-year="1990"><span class="tooltip">+0.32°C</span></div>
+                <div class="temp-bar positive" style="height: 70px" data-year="2000"><span class="tooltip">+0.45°C</span></div>
+                <div class="temp-bar positive" style="height: 100px" data-year="2005"><span class="tooltip">+0.68°C</span></div>
+                <div class="temp-bar positive" style="height: 120px" data-year="2010"><span class="tooltip">+0.75°C</span></div>
+                <div class="temp-bar positive" style="height: 140px" data-year="2015"><span class="tooltip">+0.90°C</span></div>
+                <div class="temp-bar positive" style="height: 155px" data-year="2016"><span class="tooltip">+1.02°C</span></div>
+                <div class="temp-bar positive" style="height: 145px" data-year="2017"><span class="tooltip">+0.93°C</span></div>
+                <div class="temp-bar positive" style="height: 150px" data-year="2018"><span class="tooltip">+0.85°C</span></div>
+                <div class="temp-bar positive" style="height: 160px" data-year="2019"><span class="tooltip">+0.98°C</span></div>
+                <div class="temp-bar positive" style="height: 165px" data-year="2020"><span class="tooltip">+1.02°C</span></div>
+                <div class="temp-bar positive" style="height: 155px" data-year="2021"><span class="tooltip">+0.85°C</span></div>
+                <div class="temp-bar positive" style="height: 158px" data-year="2022"><span class="tooltip">+0.89°C</span></div>
+                <div class="temp-bar positive" style="height: 175px" data-year="2023"><span class="tooltip">+1.18°C</span></div>
+                <div class="temp-bar positive" style="height: 185px" data-year="2024"><span class="tooltip">+1.29°C</span></div>
+            </div>
+        </div>
+    </section>
+    
+    <section>
+        <h2>2. Atmospheric CO₂ Concentration</h2>
+        <p>Carbon dioxide levels have reached unprecedented heights in human history, driving the greenhouse effect that causes global warming.</p>
+        
+        <div class="co2-viz">
+            <div class="chart-title">Current Atmospheric CO₂ Level</div>
+            <div class="co2-meter">
+                <div class="co2-gauge">
+                    <div class="co2-gauge-inner">
+                        <div class="co2-value">424</div>
+                        <div class="co2-unit">ppm</div>
+                    </div>
+                </div>
+                <div class="co2-info">
+                    <div class="co2-stat">
+                        <div class="co2-stat-icon danger">🔴</div>
+                        <div class="co2-stat-text">
+                            <strong>50% Higher Than Pre-Industrial</strong>
+                            <span>280 ppm in 1750 → 424 ppm today</span>
+                        </div>
+                    </div>
+                    <div class="co2-stat warning">
+                        <div class="co2-stat-icon warning">⚠️</div>
+                        <div class="co2-stat-text">
+                            <strong>Rising 2.5 ppm Per Year</strong>
+                            <span>Fastest rate in 800,000 years</span>
+                        </div>
+                    </div>
+                    <div class="co2-stat info">
+                        <div class="co2-stat-icon info">📊</div>
+                        <div class="co2-stat-text">
+                            <strong>Target: Below 350 ppm</strong>
+                            <span>Safe level for climate stability</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section>
+        <h2>3. Regional Impact Assessment</h2>
+        <p>Climate change affects different regions in varying ways. Click on each region to learn more about specific impacts.</p>
+        
+        <div class="impact-map">
+            <div class="chart-title">Temperature Change by Region (vs. 1950-1980)</div>
+            <div class="map-container">
+                <div class="region-card">
+                    <div class="region-icon">🏔️</div>
+                    <div class="region-name">Arctic</div>
+                    <div class="region-temp high">+3.8°C</div>
+                    <div class="region-desc">Fastest warming region. Ice sheets declining rapidly.</div>
+                </div>
+                <div class="region-card">
+                    <div class="region-icon">🌲</div>
+                    <div class="region-name">North America</div>
+                    <div class="region-temp medium">+1.5°C</div>
+                    <div class="region-desc">Increased wildfires and extreme weather events.</div>
+                </div>
+                <div class="region-card">
+                    <div class="region-icon">🏛️</div>
+                    <div class="region-name">Europe</div>
+                    <div class="region-temp medium">+1.7°C</div>
+                    <div class="region-desc">Heat waves becoming more frequent and intense.</div>
+                </div>
+                <div class="region-card">
+                    <div class="region-icon">🌴</div>
+                    <div class="region-name">Tropics</div>
+                    <div class="region-temp low">+0.9°C</div>
+                    <div class="region-desc">Coral bleaching and biodiversity loss.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section>
+        <h2>4. Sea Level Rise</h2>
+        
+        <div class="sea-level-viz">
+            <div class="chart-title">Global Mean Sea Level Rise</div>
+            <div class="wave-container">
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+            </div>
+            <div class="sea-level-stats">
+                <div class="sea-stat">
+                    <div class="sea-stat-value">+21cm</div>
+                    <div class="sea-stat-label">Since 1900</div>
+                </div>
+                <div class="sea-stat">
+                    <div class="sea-stat-value">3.7mm</div>
+                    <div class="sea-stat-label">Per Year (Current)</div>
+                </div>
+                <div class="sea-stat">
+                    <div class="sea-stat-value">+1m</div>
+                    <div class="sea-stat-label">Projected by 2100</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section>
+        <h2>5. Climate Timeline</h2>
+        
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-year">1988</div>
+                <div class="timeline-content">
+                    <h4>IPCC Established</h4>
+                    <p>Intergovernmental Panel on Climate Change formed to assess climate science.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">1997</div>
+                <div class="timeline-content">
+                    <h4>Kyoto Protocol</h4>
+                    <p>First international treaty to mandate country-by-country emissions reductions.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2015</div>
+                <div class="timeline-content">
+                    <h4>Paris Agreement</h4>
+                    <p>195 nations commit to limiting warming to 1.5°C above pre-industrial levels.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2023</div>
+                <div class="timeline-content">
+                    <h4>Hottest Year on Record</h4>
+                    <p>Global temperatures exceed 1.5°C threshold for extended periods.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section>
+        <h2>6. Recommended Actions</h2>
+        
+        <div class="actions-grid">
+            <div class="action-card">
+                <div class="action-icon">⚡</div>
+                <div class="action-title">Renewable Energy</div>
+                <div class="action-desc">Transition to solar, wind, and other clean energy sources.</div>
+                <div class="action-impact">Potential: -45% emissions by 2030</div>
+            </div>
+            <div class="action-card">
+                <div class="action-icon">🌳</div>
+                <div class="action-title">Reforestation</div>
+                <div class="action-desc">Plant trees and restore natural carbon sinks.</div>
+                <div class="action-impact">Potential: -10% emissions by 2030</div>
+            </div>
+            <div class="action-card">
+                <div class="action-icon">🚗</div>
+                <div class="action-title">Electric Transport</div>
+                <div class="action-desc">Accelerate adoption of electric vehicles.</div>
+                <div class="action-impact">Potential: -15% emissions by 2030</div>
+            </div>
+        </div>
+    </section>
+    
+    <section>
+        <h2>7. Conclusion</h2>
+        <p>The data unequivocally shows that climate change is accelerating. Without immediate and sustained action, we face irreversible damage to ecosystems and human societies. The visualizations in this paper demonstrate both the severity of the crisis and the potential for mitigation through coordinated global action.</p>
+    </section>
+    
+    <div class="references">
+        <h2>References</h2>
+        <ol>
+            <li>NASA GISS. (2024). Global Temperature Data. Goddard Institute for Space Studies.</li>
+            <li>NOAA. (2024). Annual Greenhouse Gas Index. National Oceanic and Atmospheric Administration.</li>
+            <li>IPCC. (2023). Sixth Assessment Report. Intergovernmental Panel on Climate Change.</li>
+            <li>Keeling, C.D. et al. (2024). Mauna Loa CO2 Record. Scripps Institution of Oceanography.</li>
+        </ol>
+    </div>
+</body>
+</html>
+
