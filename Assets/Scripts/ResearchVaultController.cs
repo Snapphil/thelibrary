@@ -81,32 +81,47 @@ public class ResearchVaultController : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("=== RESEARCH VAULT: Initializing Voxel Academic Library ===");
+        Debug.Log("=== RESEARCH VAULT: Initializing Voxel Academic Library (Version 1.1) ===");
         
-        CreateMaterials();
-        CreatePlayer();
-        CreateLighting();
-        CreateSkybox();
-        CreateVoxelLibrary();
-        CreateTablets();
-        CreateTVScreens(); // Create TVs for all tablets
-        CreateGazeIndicator();
-        CreateUI();
-        
-        // New Enhancements
-        BuildGardenAndSurroundings();
-        // Gate removed - was blocking stairway access
-        // CreateInteractiveGate();
-        
-        // Add torches throughout library and outside
-        CreateTorches();
-        
-        LockCursor();
-        
-        // Defer content height calculation until layout is ready
-        StartCoroutine(InitializeContentHeightsDelayed());
-        
-        Debug.Log("=== RESEARCH VAULT: Library Ready ===");
+        try 
+        {
+            CreateMaterials();
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"CRITICAL ERROR in CreateMaterials: {e.Message}\n{e.StackTrace}");
+        }
+
+        try
+        {
+            CreatePlayer();
+            CreateLighting();
+            CreateSkybox();
+            CreateVoxelLibrary();
+            CreateTablets();
+            CreateTVScreens(); // Create TVs for all tablets
+            CreateGazeIndicator();
+            CreateUI();
+            
+            // New Enhancements
+            BuildGardenAndSurroundings();
+            // Gate removed - was blocking stairway access
+            // CreateInteractiveGate();
+            
+            // Add torches throughout library and outside
+            CreateTorches();
+            
+            LockCursor();
+            
+            // Defer content height calculation until layout is ready
+            StartCoroutine(InitializeContentHeightsDelayed());
+            
+            Debug.Log("=== RESEARCH VAULT: Library Ready ===");
+        }
+        catch (System.Exception e)
+        {
+             Debug.LogError($"CRITICAL ERROR during initialization: {e.Message}\n{e.StackTrace}");
+        }
     }
     
     IEnumerator InitializeContentHeightsDelayed()
@@ -133,22 +148,33 @@ public class ResearchVaultController : MonoBehaviour
     
     void Update()
     {
-        HandleMouseLook(); // Always update mouse look (locked or not)
-        
-        if (!isViewingPaper)
+        try
         {
-            HandleMovement();
-            HandleGazeInteraction();
-            // HandleGateInteraction(); // Gate removed - was blocking stairway
-            // Check if gazing at TV for passive scrolling
-            HandleTVGaze();
+            HandleMouseLook(); // Always update mouse look (locked or not)
+            
+            if (!isViewingPaper)
+            {
+                HandleMovement();
+                HandleGazeInteraction();
+                // HandleGateInteraction(); // Gate removed - was blocking stairway
+                // Check if gazing at TV for passive scrolling
+                HandleTVGaze();
+            }
+            else
+            {
+                HandlePanelInteraction(); // Handle active panel interaction
+            }
+            
+            HandleCursorLock();
         }
-        else
+        catch (System.Exception e)
         {
-            HandlePanelInteraction(); // Handle active panel interaction
+            // Log only once per second to avoid spamming
+            if (Time.frameCount % 60 == 0)
+            {
+                 Debug.LogError($"Error in Update Loop: {e.Message}");
+            }
         }
-        
-        HandleCursorLock();
     }
 
     void HandleTVGaze()
