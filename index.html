@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Research Vault - A Voxel Academic Library</title>
+    <title>{{{ PRODUCT_NAME }}} - Research Vault</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -204,6 +204,45 @@
         }
         
         /* Buttons */
+        .webxr-button {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 18px 50px;
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1612;
+            background: linear-gradient(135deg, #c9a962 0%, #d4b978 50%, #c9a962 100%);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 30px rgba(201, 169, 98, 0.4),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        
+        .webxr-button:hover {
+            transform: translateX(-50%) translateY(-3px);
+            box-shadow: 0 15px 40px rgba(201, 169, 98, 0.5),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+        
+        .webxr-button:active {
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        .webxr-button:disabled {
+            background: linear-gradient(135deg, #444 0%, #555 100%);
+            cursor: not-allowed;
+            box-shadow: none;
+            color: #888;
+        }
+        
         #fullscreen-button {
             position: absolute;
             bottom: 30px;
@@ -353,15 +392,17 @@
         <div id="paper-close-hint">Press <kbd>ESC</kbd> or click <kbd>✕</kbd> to close</div>
     </div>
     
+    <button id="vr-button" class="webxr-button" style="display: none;">🥽 Enter VR</button>
     <button id="fullscreen-button" style="display: none;">⛶ Fullscreen</button>
     
-    <script src="Build/UnityLoader.js"></script>
+    <script src="Build/{{{ LOADER_FILENAME }}}"></script>
     <script>
         var container = document.querySelector("#unity-container");
         var canvas = document.querySelector("#unity-canvas");
         var loadingBar = document.querySelector("#unity-loading-bar");
         var progressBarFull = document.querySelector("#unity-progress-bar-full");
         var loadingText = document.querySelector("#loading-text");
+        var vrButton = document.querySelector("#vr-button");
         var fullscreenButton = document.querySelector("#fullscreen-button");
         var instructions = document.querySelector("#instructions");
         var paperViewerOverlay = document.querySelector("#paper-viewer-overlay");
@@ -376,6 +417,27 @@
             "StreamingAssets/Paper3.html": "Quantum Computing Fundamentals",
             "StreamingAssets/Paper4.html": "Human-Computer Interaction"
         };
+        
+        var buildUrl = "Build";
+        var config = {
+            dataUrl: buildUrl + "/{{{ DATA_FILENAME }}}",
+            frameworkUrl: buildUrl + "/{{{ FRAMEWORK_FILENAME }}}",
+            codeUrl: buildUrl + "/{{{ CODE_FILENAME }}}",
+#if MEMORY_FILENAME
+            memoryUrl: buildUrl + "/{{{ MEMORY_FILENAME }}}",
+#endif
+#if SYMBOLS_FILENAME
+            symbolsUrl: buildUrl + "/{{{ SYMBOLS_FILENAME }}}",
+#endif
+            streamingAssetsUrl: "StreamingAssets",
+            companyName: "{{{ COMPANY_NAME }}}",
+            productName: "{{{ PRODUCT_NAME }}}",
+            productVersion: "{{{ PRODUCT_VERSION }}}",
+        };
+
+        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+            container.className = "unity-mobile";
+        }
 
         var loadingMessages = [
             "Building voxel walls...",
@@ -393,50 +455,63 @@
             }
         }, 2000);
 
-        // Unity 2019.4 loader
-        var unityInstance = UnityLoader.instantiate("unity-container", "Build/WebBuild.json", {
-            onProgress: function(unityInstance, progress) {
-                progressBarFull.style.width = (100 * progress) + "%";
-                if (progress < 0.3) {
-                    loadingText.textContent = "Building voxel walls...";
-                } else if (progress < 0.5) {
-                    loadingText.textContent = "Arranging bookshelves...";
-                } else if (progress < 0.7) {
-                    loadingText.textContent = "Lighting lanterns...";
-                } else if (progress < 0.9) {
-                    loadingText.textContent = "Placing tablets...";
-                } else {
-                    loadingText.textContent = "Opening the vault...";
-                }
-                
-                if (progress >= 1) {
-                    loadingBar.style.display = "none";
-                    fullscreenButton.style.display = "block";
-                    instructions.style.display = "block";
-                    unityInstanceRef = unityInstance;
-                }
-            },
-            Module: {
-                TOTAL_MEMORY: 268435456,
-                onRuntimeInitialized: function() {
-                    console.log("Unity runtime initialized");
-                }
-            }
-        });
-        
-        // Fullscreen button
-        fullscreenButton.onclick = function() {
-            if (document.fullscreenElement) {
-                document.exitFullscreen();
+        createUnityInstance(canvas, config, (progress) => {
+            progressBarFull.style.width = (100 * progress) + "%";
+            if (progress < 0.3) {
+                loadingText.textContent = "Building voxel walls...";
+            } else if (progress < 0.5) {
+                loadingText.textContent = "Arranging bookshelves...";
+            } else if (progress < 0.7) {
+                loadingText.textContent = "Lighting lanterns...";
+            } else if (progress < 0.9) {
+                loadingText.textContent = "Placing tablets...";
             } else {
-                container.requestFullscreen();
+                loadingText.textContent = "Opening the vault...";
             }
-        };
-        
-        // Click to focus
-        canvas.onclick = function() {
-            canvas.focus();
-        };
+        }).then((unityInstance) => {
+            unityInstanceRef = unityInstance;
+            loadingBar.style.display = "none";
+            fullscreenButton.style.display = "block";
+            instructions.style.display = "block";
+            
+            // Fullscreen button
+            fullscreenButton.onclick = () => {
+                if (document.fullscreenElement) {
+                    document.exitFullscreen();
+                } else {
+                    container.requestFullscreen();
+                }
+            };
+            
+            // Check for WebXR support
+            if (navigator.xr) {
+                navigator.xr.isSessionSupported('immersive-vr').then((supported) => {
+                    if (supported) {
+                        vrButton.style.display = "block";
+                        vrButton.onclick = () => {
+                            if (unityInstance.Module && unityInstance.Module.WebXR) {
+                                unityInstance.Module.WebXR.toggleVR();
+                            } else {
+                                navigator.xr.requestSession('immersive-vr').then((session) => {
+                                    console.log("VR session started");
+                                }).catch((err) => {
+                                    console.log("Could not start VR session:", err);
+                                    alert("VR mode requires WebXR support. Try using a VR headset browser.");
+                                });
+                            }
+                        };
+                    }
+                });
+            }
+            
+            // Click to start
+            canvas.onclick = () => {
+                canvas.focus();
+            };
+            
+        }).catch((message) => {
+            alert("Failed to load Research Vault: " + message);
+        });
         
         // Paper Viewer Functions - Called from Unity
         function ShowPaperViewer(url) {
@@ -450,7 +525,7 @@
             
             // Show overlay with animation
             paperViewerOverlay.classList.add("active");
-            setTimeout(function() {
+            setTimeout(() => {
                 paperViewerOverlay.classList.add("visible");
             }, 10);
             
@@ -463,7 +538,7 @@
             
             // Hide with animation
             paperViewerOverlay.classList.remove("visible");
-            setTimeout(function() {
+            setTimeout(() => {
                 paperViewerOverlay.classList.remove("active");
                 paperIframe.src = "";
             }, 400);
@@ -483,6 +558,8 @@
         // Alias for Unity interop
         window.ShowPaperViewer = ShowPaperViewer;
         window.HidePaperViewer = HidePaperViewer;
+        
+        // Also expose as lowercase for compatibility
         window.showPaperViewer = ShowPaperViewer;
         window.hidePaperViewer = HidePaperViewer;
         
