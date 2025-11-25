@@ -1,0 +1,155 @@
+QUANTUM COMPUTING FUNDAMENTALS
+From Qubits to Quantum Supremacy
+
+Dr. Alex Quantum, Prof. Lisa Chen, Dr. Raj Patel
+Caltech Quantum Research Institute
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ABSTRACT
+
+An introduction to quantum computing principles, from the fundamental qubit to quantum algorithms. We explore superposition, entanglement, quantum gates, and the revolutionary potential of quantum computers to solve problems intractable for classical systems.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+KEY STATISTICS
+
+• Largest Quantum Computer: 1,121 qubits (IBM Condor)
+• Quantum Volume Record: 32,768 (Quantinuum)
+• Error Rate: ~10⁻³ per gate
+• Operating Temperature: 15 millikelvin
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. THE QUBIT
+
+Classical Bit: Either 0 OR 1
+
+Quantum Bit (Qubit): 0 AND 1 simultaneously!
+  |ψ⟩ = α|0⟩ + β|1⟩
+  where |α|² + |β|² = 1
+
+Key Properties:
+• Superposition: Exists in multiple states at once
+• Measurement: Collapses to definite state (0 or 1)
+• Bloch Sphere: 3D representation of qubit state
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+2. QUANTUM ENTANGLEMENT
+
+When qubits become entangled, measuring one instantly determines the other - regardless of distance!
+
+Bell State: |Φ+⟩ = (|00⟩ + |11⟩)/√2
+
+Properties:
+• Non-local correlations
+• Einstein called it "spooky action at a distance"
+• Foundation for quantum cryptography
+• Enables quantum teleportation
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+3. QUANTUM GATES
+
+Hadamard (H):
+  Creates superposition
+  H|0⟩ = (|0⟩ + |1⟩)/√2
+
+Pauli-X (NOT):
+  Flips the qubit
+  X|0⟩ = |1⟩
+
+Pauli-Z:
+  Phase flip
+  Z|1⟩ = -|1⟩
+
+CNOT (Controlled-NOT):
+  Two-qubit gate
+  Creates entanglement
+
+Phase Gates (S, T):
+  Rotate phase of |1⟩ state
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+4. QUANTUM ALGORITHMS
+
+Shor's Algorithm (Factoring):
+• Factors large numbers exponentially faster
+• Complexity: O((log N)³) vs O(e^N) classical
+• Threatens RSA encryption!
+
+Grover's Algorithm (Search):
+• Searches unsorted database
+• Quadratic speedup: O(√N) vs O(N)
+• Applications: optimization, databases
+
+VQE (Variational Quantum Eigensolver):
+• Chemistry simulations
+• Drug discovery applications
+• Materials science
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+5. QUANTUM ADVANTAGE
+
+Task: Factor 2048-bit RSA number
+• Classical computer: ~300 trillion years
+• Quantum computer: ~10 seconds
+
+Task: Search N items
+• Classical: O(N) operations
+• Quantum: O(√N) operations
+
+Task: Simulate molecules
+• Classical: Exponential scaling
+• Quantum: Polynomial scaling
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+6. CURRENT STATE OF THE ART
+
+Leading Systems:
+• IBM Condor: 1,121 qubits
+• Google Sycamore: 72 qubits
+• IonQ Forte: 32 qubits (trapped ion)
+• Quantinuum H2: 32 qubits (highest fidelity)
+
+Challenges:
+• Decoherence (quantum states decay)
+• Error correction overhead
+• Extreme cooling requirements
+• Scalability
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+7. APPLICATIONS
+
+Near-term (NISQ era):
+• Quantum chemistry simulations
+• Optimization problems
+• Machine learning enhancement
+• Financial modeling
+
+Long-term (Fault-tolerant):
+• Breaking current encryption
+• Drug discovery revolution
+• Climate modeling
+• Artificial intelligence
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CONCLUSION
+
+Quantum computing represents a paradigm shift in computation. While still in early stages with significant challenges, rapid progress in qubit count, error correction, and algorithm development promises revolutionary capabilities within this decade.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+REFERENCES
+
+1. Nielsen & Chuang, Quantum Computation (2010)
+2. Preskill, J. "Quantum Computing in the NISQ era" (2018)
+3. Arute, F. et al. "Quantum supremacy" Nature (2019)
+4. IBM Quantum Roadmap (2024)
+
