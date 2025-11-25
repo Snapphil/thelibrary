@@ -14,6 +14,7 @@ public class ResearchVaultController : MonoBehaviour
 {
     [Header("=== VOXEL LIBRARY SETTINGS ===")]
     [SerializeField] private float voxelSize = 0.25f;
+    [SerializeField] private Shader defaultShader; // Add this field to ensure a shader is included
     [SerializeField] private Material stoneBrickMaterial;
     [SerializeField] private Material woodMaterial;
     [SerializeField] private Material darkWoodMaterial;
@@ -230,9 +231,16 @@ public class ResearchVaultController : MonoBehaviour
     {
         Shader shader = Shader.Find("Universal Render Pipeline/Lit");
         if (shader == null) shader = Shader.Find("Standard");
+        if (shader == null) shader = Shader.Find("Mobile/Diffuse");
         if (shader == null) shader = Shader.Find("Unlit/Color");
-        if (shader == null) shader = Shader.Find("Diffuse");
+        if (shader == null) shader = defaultShader; // Use the inspector-assigned shader as final fallback
         
+        if (shader == null)
+        {
+            Debug.LogError($"Could not find ANY shader for material {name}. Make sure to assign Default Shader in inspector!");
+            return new Material(Shader.Find("Hidden/InternalErrorShader")); // Last resort to prevent crash
+        }
+
         Material mat = new Material(shader);
         mat.name = name;
         mat.color = color;
@@ -243,21 +251,32 @@ public class ResearchVaultController : MonoBehaviour
     {
         Shader shader = Shader.Find("Universal Render Pipeline/Lit");
         if (shader == null) shader = Shader.Find("Standard");
-        if (shader == null) shader = Shader.Find("Unlit/Color");
-        if (shader == null) shader = Shader.Find("Diffuse");
+        if (shader == null) shader = Shader.Find("Mobile/Diffuse");
+        if (shader == null) shader = Shader.Find("Unlit/Transparent");
+        if (shader == null) shader = defaultShader;
+
+        if (shader == null)
+        {
+             Debug.LogError($"Could not find shader for transparent material {name}");
+             return new Material(Shader.Find("Hidden/InternalErrorShader"));
+        }
         
         Material mat = new Material(shader);
         mat.name = name;
         mat.color = color;
-        mat.SetFloat("_Surface", 1); // Transparent
-        mat.SetFloat("_Blend", 0);
-        mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-        mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-        mat.SetInt("_ZWrite", 0);
-        mat.DisableKeyword("_ALPHATEST_ON");
-        mat.EnableKeyword("_ALPHABLEND_ON");
-        mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-        mat.renderQueue = 3000;
+        // ... rest of properties
+        if (shader.name.Contains("Lit") || shader.name.Contains("Standard"))
+        {
+            mat.SetFloat("_Surface", 1); // Transparent
+            mat.SetFloat("_Blend", 0);
+            mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+            mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+            mat.SetInt("_ZWrite", 0);
+            mat.DisableKeyword("_ALPHATEST_ON");
+            mat.EnableKeyword("_ALPHABLEND_ON");
+            mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+            mat.renderQueue = 3000;
+        }
         return mat;
     }
     
@@ -265,14 +284,23 @@ public class ResearchVaultController : MonoBehaviour
     {
         Shader shader = Shader.Find("Universal Render Pipeline/Lit");
         if (shader == null) shader = Shader.Find("Standard");
-        if (shader == null) shader = Shader.Find("Unlit/Color");
-        if (shader == null) shader = Shader.Find("Diffuse");
+        if (shader == null) shader = Shader.Find("Mobile/Diffuse");
+        if (shader == null) shader = defaultShader;
+
+        if (shader == null)
+        {
+             Debug.LogError($"Could not find shader for emissive material {name}");
+             return new Material(Shader.Find("Hidden/InternalErrorShader"));
+        }
         
         Material mat = new Material(shader);
         mat.name = name;
         mat.color = color;
         mat.EnableKeyword("_EMISSION");
-        mat.SetColor("_EmissionColor", color * intensity);
+        if (mat.HasProperty("_EmissionColor"))
+        {
+            mat.SetColor("_EmissionColor", color * intensity);
+        }
         return mat;
     }
     
