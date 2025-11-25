@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Research Vault - A Voxel Academic Library</title>
+    <title>{{{ PRODUCT_NAME }}} - Research Vault</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -32,6 +32,7 @@
             background: transparent;
         }
         
+        /* Loading Screen */
         #unity-loading-bar { 
             position: absolute; 
             left: 50%; 
@@ -95,6 +96,153 @@
             letter-spacing: 1px;
         }
         
+        /* Paper Viewer Overlay */
+        #paper-viewer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 15, 0.95);
+            z-index: 2000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        
+        #paper-viewer-overlay.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #paper-viewer-overlay.visible {
+            opacity: 1;
+        }
+        
+        #paper-viewer-container {
+            width: 90%;
+            max-width: 1400px;
+            height: 85%;
+            background: #faf8f5;
+            border-radius: 12px;
+            box-shadow: 0 30px 100px rgba(0, 0, 0, 0.8),
+                        0 0 0 1px rgba(201, 169, 98, 0.3);
+            overflow: hidden;
+            position: relative;
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        #paper-viewer-overlay.visible #paper-viewer-container {
+            transform: scale(1) translateY(0);
+        }
+        
+        #paper-viewer-header {
+            height: 50px;
+            background: linear-gradient(180deg, #2a2520 0%, #1f1b17 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            border-bottom: 1px solid rgba(201, 169, 98, 0.2);
+        }
+        
+        #paper-viewer-title {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 18px;
+            color: #c9a962;
+            font-weight: 600;
+        }
+        
+        #paper-close-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: 1px solid rgba(201, 169, 98, 0.3);
+            background: rgba(201, 169, 98, 0.1);
+            color: #c9a962;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #paper-close-btn:hover {
+            background: rgba(201, 169, 98, 0.2);
+            border-color: rgba(201, 169, 98, 0.5);
+            transform: scale(1.05);
+        }
+        
+        #paper-iframe {
+            width: 100%;
+            height: calc(100% - 50px);
+            border: none;
+            background: #faf8f5;
+        }
+        
+        #paper-close-hint {
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: rgba(201, 169, 98, 0.6);
+            letter-spacing: 1px;
+        }
+        
+        #paper-close-hint kbd {
+            background: rgba(201, 169, 98, 0.2);
+            padding: 4px 10px;
+            border-radius: 4px;
+            border: 1px solid rgba(201, 169, 98, 0.3);
+            margin: 0 4px;
+        }
+        
+        /* Buttons */
+        .webxr-button {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 18px 50px;
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1612;
+            background: linear-gradient(135deg, #c9a962 0%, #d4b978 50%, #c9a962 100%);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 30px rgba(201, 169, 98, 0.4),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        
+        .webxr-button:hover {
+            transform: translateX(-50%) translateY(-3px);
+            box-shadow: 0 15px 40px rgba(201, 169, 98, 0.5),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+        
+        .webxr-button:active {
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        .webxr-button:disabled {
+            background: linear-gradient(135deg, #444 0%, #555 100%);
+            cursor: not-allowed;
+            box-shadow: none;
+            color: #888;
+        }
+        
         #fullscreen-button {
             position: absolute;
             bottom: 30px;
@@ -118,6 +266,7 @@
             border-color: rgba(201, 169, 98, 0.5);
         }
         
+        /* Instructions Panel */
         #instructions {
             position: absolute;
             top: 20px;
@@ -163,6 +312,7 @@
             text-align: center;
         }
         
+        /* Decorative Elements */
         .corner-decoration {
             position: absolute;
             width: 60px;
@@ -172,10 +322,33 @@
             pointer-events: none;
         }
         
-        .corner-decoration.top-left { top: 15px; left: 15px; border-right: none; border-bottom: none; }
-        .corner-decoration.top-right { top: 15px; right: 15px; border-left: none; border-bottom: none; }
-        .corner-decoration.bottom-left { bottom: 15px; left: 15px; border-right: none; border-top: none; }
-        .corner-decoration.bottom-right { bottom: 15px; right: 15px; border-left: none; border-top: none; }
+        .corner-decoration.top-left {
+            top: 15px;
+            left: 15px;
+            border-right: none;
+            border-bottom: none;
+        }
+        
+        .corner-decoration.top-right {
+            top: 15px;
+            right: 15px;
+            border-left: none;
+            border-bottom: none;
+        }
+        
+        .corner-decoration.bottom-left {
+            bottom: 15px;
+            left: 15px;
+            border-right: none;
+            border-top: none;
+        }
+        
+        .corner-decoration.bottom-right {
+            bottom: 15px;
+            right: 15px;
+            border-left: none;
+            border-top: none;
+        }
     </style>
 </head>
 <body>
@@ -192,6 +365,7 @@
             <div id="loading-text">Initializing library...</div>
         </div>
         
+        <!-- Corner Decorations -->
         <div class="corner-decoration top-left"></div>
         <div class="corner-decoration top-right"></div>
         <div class="corner-decoration bottom-left"></div>
@@ -206,19 +380,64 @@
         <p><span class="key">ESC</span> Close / Unlock cursor</p>
     </div>
     
+    <!-- Paper Viewer Overlay -->
+    <div id="paper-viewer-overlay">
+        <div id="paper-viewer-container">
+            <div id="paper-viewer-header">
+                <span id="paper-viewer-title">Research Paper Visualization</span>
+                <button id="paper-close-btn" onclick="hidePaperViewer()">✕</button>
+            </div>
+            <iframe id="paper-iframe" src="" title="Research Paper"></iframe>
+        </div>
+        <div id="paper-close-hint">Press <kbd>ESC</kbd> or click <kbd>✕</kbd> to close</div>
+    </div>
+    
+    <button id="vr-button" class="webxr-button" style="display: none;">🥽 Enter VR</button>
     <button id="fullscreen-button" style="display: none;">⛶ Fullscreen</button>
     
-    <script src="Build/UnityLoader.js"></script>
+    <script src="Build/{{{ LOADER_FILENAME }}}"></script>
     <script>
         var container = document.querySelector("#unity-container");
         var canvas = document.querySelector("#unity-canvas");
         var loadingBar = document.querySelector("#unity-loading-bar");
         var progressBarFull = document.querySelector("#unity-progress-bar-full");
         var loadingText = document.querySelector("#loading-text");
+        var vrButton = document.querySelector("#vr-button");
         var fullscreenButton = document.querySelector("#fullscreen-button");
         var instructions = document.querySelector("#instructions");
+        var paperViewerOverlay = document.querySelector("#paper-viewer-overlay");
+        var paperIframe = document.querySelector("#paper-iframe");
+        var paperViewerTitle = document.querySelector("#paper-viewer-title");
         
         var unityInstanceRef = null;
+        
+        var paperTitles = {
+            "StreamingAssets/Paper1.html": "Neural Networks & Deep Learning",
+            "StreamingAssets/Paper2.html": "Climate Change Data Analysis",
+            "StreamingAssets/Paper3.html": "Quantum Computing Fundamentals",
+            "StreamingAssets/Paper4.html": "Human-Computer Interaction"
+        };
+        
+        var buildUrl = "Build";
+        var config = {
+            dataUrl: buildUrl + "/{{{ DATA_FILENAME }}}",
+            frameworkUrl: buildUrl + "/{{{ FRAMEWORK_FILENAME }}}",
+            codeUrl: buildUrl + "/{{{ CODE_FILENAME }}}",
+#if MEMORY_FILENAME
+            memoryUrl: buildUrl + "/{{{ MEMORY_FILENAME }}}",
+#endif
+#if SYMBOLS_FILENAME
+            symbolsUrl: buildUrl + "/{{{ SYMBOLS_FILENAME }}}",
+#endif
+            streamingAssetsUrl: "StreamingAssets",
+            companyName: "{{{ COMPANY_NAME }}}",
+            productName: "{{{ PRODUCT_NAME }}}",
+            productVersion: "{{{ PRODUCT_VERSION }}}",
+        };
+
+        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+            container.className = "unity-mobile";
+        }
 
         var loadingMessages = [
             "Building voxel walls...",
@@ -236,45 +455,121 @@
             }
         }, 2000);
 
-        // Unity 2019.4 loader
-        var unityInstance = UnityLoader.instantiate("unity-container", "Build/WebBuild.json", {
-            onProgress: function(instance, progress) {
-                progressBarFull.style.width = (100 * progress) + "%";
-                if (progress < 0.3) {
-                    loadingText.textContent = "Building voxel walls...";
-                } else if (progress < 0.5) {
-                    loadingText.textContent = "Arranging bookshelves...";
-                } else if (progress < 0.7) {
-                    loadingText.textContent = "Lighting lanterns...";
-                } else if (progress < 0.9) {
-                    loadingText.textContent = "Placing tablets...";
-                } else {
-                    loadingText.textContent = "Opening the vault...";
-                }
-                
-                if (progress >= 1) {
-                    loadingBar.style.display = "none";
-                    fullscreenButton.style.display = "block";
-                    instructions.style.display = "block";
-                    unityInstanceRef = instance;
-                }
-            },
-            Module: {
-                TOTAL_MEMORY: 268435456
+        createUnityInstance(canvas, config, (progress) => {
+            progressBarFull.style.width = (100 * progress) + "%";
+            if (progress < 0.3) {
+                loadingText.textContent = "Building voxel walls...";
+            } else if (progress < 0.5) {
+                loadingText.textContent = "Arranging bookshelves...";
+            } else if (progress < 0.7) {
+                loadingText.textContent = "Lighting lanterns...";
+            } else if (progress < 0.9) {
+                loadingText.textContent = "Placing tablets...";
+            } else {
+                loadingText.textContent = "Opening the vault...";
             }
+        }).then((unityInstance) => {
+            unityInstanceRef = unityInstance;
+            loadingBar.style.display = "none";
+            fullscreenButton.style.display = "block";
+            instructions.style.display = "block";
+            
+            // Fullscreen button
+            fullscreenButton.onclick = () => {
+                if (document.fullscreenElement) {
+                    document.exitFullscreen();
+                } else {
+                    container.requestFullscreen();
+                }
+            };
+            
+            // Check for WebXR support
+            if (navigator.xr) {
+                navigator.xr.isSessionSupported('immersive-vr').then((supported) => {
+                    if (supported) {
+                        vrButton.style.display = "block";
+                        vrButton.onclick = () => {
+                            if (unityInstance.Module && unityInstance.Module.WebXR) {
+                                unityInstance.Module.WebXR.toggleVR();
+                            } else {
+                                navigator.xr.requestSession('immersive-vr').then((session) => {
+                                    console.log("VR session started");
+                                }).catch((err) => {
+                                    console.log("Could not start VR session:", err);
+                                    alert("VR mode requires WebXR support. Try using a VR headset browser.");
+                                });
+                            }
+                        };
+                    }
+                });
+            }
+            
+            // Click to start
+            canvas.onclick = () => {
+                canvas.focus();
+            };
+            
+        }).catch((message) => {
+            alert("Failed to load Research Vault: " + message);
         });
         
-        fullscreenButton.onclick = function() {
-            if (document.fullscreenElement) {
-                document.exitFullscreen();
-            } else {
-                container.requestFullscreen();
-            }
-        };
+        // Paper Viewer Functions - Called from Unity
+        function ShowPaperViewer(url) {
+            console.log("Opening paper:", url);
+            
+            // Set title based on URL
+            paperViewerTitle.textContent = paperTitles[url] || "Research Paper";
+            
+            // Set iframe source
+            paperIframe.src = url;
+            
+            // Show overlay with animation
+            paperViewerOverlay.classList.add("active");
+            setTimeout(() => {
+                paperViewerOverlay.classList.add("visible");
+            }, 10);
+            
+            // Hide instructions while viewing
+            instructions.style.display = "none";
+        }
         
-        canvas.onclick = function() {
+        function HidePaperViewer() {
+            console.log("Closing paper viewer");
+            
+            // Hide with animation
+            paperViewerOverlay.classList.remove("visible");
+            setTimeout(() => {
+                paperViewerOverlay.classList.remove("active");
+                paperIframe.src = "";
+            }, 400);
+            
+            // Show instructions again
+            instructions.style.display = "block";
+            
+            // Notify Unity
+            if (unityInstanceRef) {
+                unityInstanceRef.SendMessage("ResearchVaultController", "OnPaperViewerClosed");
+            }
+            
+            // Re-focus canvas
             canvas.focus();
-        };
+        }
+        
+        // Alias for Unity interop
+        window.ShowPaperViewer = ShowPaperViewer;
+        window.HidePaperViewer = HidePaperViewer;
+        
+        // Also expose as lowercase for compatibility
+        window.showPaperViewer = ShowPaperViewer;
+        window.hidePaperViewer = HidePaperViewer;
+        
+        // Keyboard handler for ESC
+        document.addEventListener("keydown", function(e) {
+            if (e.key === "Escape" && paperViewerOverlay.classList.contains("active")) {
+                HidePaperViewer();
+                e.preventDefault();
+            }
+        });
     </script>
 </body>
 </html>
