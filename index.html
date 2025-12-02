@@ -1,92 +1,25 @@
 <!DOCTYPE html>
 <html lang="en-us">
-<head>
+  <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Research Vault - A Voxel Academic Library</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Crimson Pro', Georgia, serif; background: #0a0a0f; }
-        #unity-container { width: 100%; height: 100%; position: absolute; background: linear-gradient(145deg, #1a1612 0%, #0d0b09 50%, #151210 100%); }
-        #unity-canvas { width: 100%; height: 100%; background: transparent; }
-        #unity-loading-bar { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 100; }
-        #unity-logo { font-size: 72px; margin-bottom: 30px; animation: float 3s ease-in-out infinite; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        #loading-title { font-family: 'Crimson Pro', Georgia, serif; font-size: 42px; font-weight: 600; color: #c9a962; letter-spacing: 4px; margin-bottom: 10px; text-transform: uppercase; }
-        #loading-subtitle { font-family: 'JetBrains Mono', monospace; font-size: 14px; color: rgba(201, 169, 98, 0.6); letter-spacing: 2px; margin-bottom: 40px; }
-        #unity-progress-bar-empty { width: 350px; height: 4px; background: rgba(201, 169, 98, 0.15); border-radius: 2px; overflow: hidden; margin: 0 auto 20px; }
-        #unity-progress-bar-full { width: 0%; height: 100%; background: linear-gradient(90deg, #8b6914 0%, #c9a962 50%, #d4b978 100%); border-radius: 2px; transition: width 0.3s ease; box-shadow: 0 0 20px rgba(201, 169, 98, 0.5); }
-        #loading-text { font-family: 'JetBrains Mono', monospace; color: rgba(201, 169, 98, 0.8); font-size: 13px; letter-spacing: 1px; }
-        #fullscreen-button { position: absolute; bottom: 30px; right: 30px; padding: 14px 28px; font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500; color: #c9a962; background: rgba(201, 169, 98, 0.1); border: 1px solid rgba(201, 169, 98, 0.3); border-radius: 25px; cursor: pointer; transition: all 0.3s ease; z-index: 1000; letter-spacing: 1px; }
-        #fullscreen-button:hover { background: rgba(201, 169, 98, 0.2); border-color: rgba(201, 169, 98, 0.5); }
-        #instructions { position: absolute; top: 20px; left: 20px; color: rgba(201, 169, 98, 0.9); font-size: 13px; background: rgba(26, 22, 18, 0.9); padding: 20px 25px; border-radius: 12px; border: 1px solid rgba(201, 169, 98, 0.2); max-width: 280px; z-index: 1000; backdrop-filter: blur(10px); }
-        #instructions h3 { font-family: 'Crimson Pro', Georgia, serif; font-size: 18px; font-weight: 600; margin-bottom: 15px; color: #c9a962; letter-spacing: 2px; text-transform: uppercase; }
-        #instructions p { font-family: 'JetBrains Mono', monospace; margin-bottom: 8px; font-size: 12px; color: rgba(201, 169, 98, 0.7); display: flex; align-items: center; gap: 10px; }
-        #instructions p span.key { background: rgba(201, 169, 98, 0.15); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(201, 169, 98, 0.2); font-size: 11px; min-width: 45px; text-align: center; }
-        .corner-decoration { position: absolute; width: 60px; height: 60px; border: 2px solid rgba(201, 169, 98, 0.15); z-index: 999; pointer-events: none; }
-        .corner-decoration.top-left { top: 15px; left: 15px; border-right: none; border-bottom: none; }
-        .corner-decoration.top-right { top: 15px; right: 15px; border-left: none; border-bottom: none; }
-        .corner-decoration.bottom-left { bottom: 15px; left: 15px; border-right: none; border-top: none; }
-        .corner-decoration.bottom-right { bottom: 15px; right: 15px; border-left: none; border-top: none; }
-    </style>
-</head>
-<body>
-    <div id="unity-container">
-        <canvas id="unity-canvas" tabindex="-1"></canvas>
-        <div id="unity-loading-bar">
-            <div id="unity-logo">📚</div>
-            <div id="loading-title">Research Vault</div>
-            <div id="loading-subtitle">A Voxel Academic Library</div>
-            <div id="unity-progress-bar-empty"><div id="unity-progress-bar-full"></div></div>
-            <div id="loading-text">Initializing library...</div>
-        </div>
-        <div class="corner-decoration top-left"></div>
-        <div class="corner-decoration top-right"></div>
-        <div class="corner-decoration bottom-left"></div>
-        <div class="corner-decoration bottom-right"></div>
-    </div>
-    <div id="instructions" style="display: none;">
-        <h3>Controls</h3>
-        <p><span class="key">WASD</span> Move around</p>
-        <p><span class="key">Mouse</span> Look around</p>
-        <p><span class="key">Gaze</span> Look at tablet 2s</p>
-        <p><span class="key">ESC</span> Close / Unlock cursor</p>
-    </div>
-    <button id="fullscreen-button" style="display: none;">⛶ Fullscreen</button>
+    <title>Unity WebGL Player | VRAssignment9</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+    <script src="TemplateData/UnityProgress.js"></script>
     <script src="Build/UnityLoader.js"></script>
     <script>
-        var container = document.querySelector("#unity-container");
-        var canvas = document.querySelector("#unity-canvas");
-        var loadingBar = document.querySelector("#unity-loading-bar");
-        var progressBarFull = document.querySelector("#unity-progress-bar-full");
-        var loadingText = document.querySelector("#loading-text");
-        var fullscreenButton = document.querySelector("#fullscreen-button");
-        var instructions = document.querySelector("#instructions");
-        var unityInstance = UnityLoader.instantiate("unity-container", "Build/WebBuild.json", {
-            onProgress: function(instance, progress) {
-                progressBarFull.style.width = (100 * progress) + "%";
-                if (progress < 0.3) loadingText.textContent = "Building voxel walls...";
-                else if (progress < 0.5) loadingText.textContent = "Arranging bookshelves...";
-                else if (progress < 0.7) loadingText.textContent = "Lighting lanterns...";
-                else if (progress < 0.9) loadingText.textContent = "Placing tablets...";
-                else loadingText.textContent = "Opening the vault...";
-                if (progress >= 1) {
-                    loadingBar.style.display = "none";
-                    fullscreenButton.style.display = "block";
-                    instructions.style.display = "block";
-                }
-            },
-            Module: { TOTAL_MEMORY: 268435456 }
-        });
-        fullscreenButton.onclick = function() {
-            if (document.fullscreenElement) document.exitFullscreen();
-            else container.requestFullscreen();
-        };
-        canvas.onclick = function() { canvas.focus(); };
+      var unityInstance = UnityLoader.instantiate("unityContainer", "Build/WebGL.json", {onProgress: UnityProgress});
     </script>
-</body>
+  </head>
+  <body>
+    <div class="webgl-content">
+      <div id="unityContainer" style="width: 960px; height: 600px"></div>
+      <div class="footer">
+        <div class="webgl-logo"></div>
+        <div class="fullscreen" onclick="unityInstance.SetFullscreen(1)"></div>
+        <div class="title">VRAssignment9</div>
+      </div>
+    </div>
+  </body>
 </html>
